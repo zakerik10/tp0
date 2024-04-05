@@ -17,9 +17,9 @@ int main(void)
 	// Usando el logger creado previamente
 	// Escribi: "Hola! Soy un log"
 
-	char* file = malloc(sizeof(char) * 100);
+	char* file = malloc(sizeof(char) * 20);
 	char* process_name = malloc(sizeof(char) * 30);
-	char* message = malloc(sizeof(char) * 30);
+	char* message = malloc(sizeof(char) * 100);
 	bool is_active_console;
 	t_log_level level;
 
@@ -33,22 +33,44 @@ int main(void)
 
 	log_info(logger, message);
 
-	free(file);
-	free(process_name);
-	free(message);
-	free(logger);
-
 
 	/* ---------------- ARCHIVOS DE CONFIGURACION ---------------- */
-
-	config = iniciar_config();
 
 	// Usando el config creado previamente, leemos los valores del config y los 
 	// dejamos en las variables 'ip', 'puerto' y 'valor'
 
 	// Loggeamos el valor de config
 
+	// char *current_dir = getcwd(NULL, 0);
+    // // printf("El directorio actual es %s\n", current_dir);
+	// char msj[100];
+	// sprintf(msj, "El directorio actual es %s, ${workspaceFolder}/bin/${workspaceFolderBasename} \n", current_dir);
+	// printf(msj);
+	// strcpy(message, msj);
+	// log_info(logger, message);
 
+	char* path = malloc(sizeof(char) * 100);
+	strcpy(path, "../cliente.config");
+	
+	config = iniciar_config(path);
+
+	if (config == NULL) {
+		// ¡No se pudo crear el config!
+		// Terminemos el programa
+		strcpy(message, "No se encontro el archivo config");
+		log_info(logger, message);
+		exit(EXIT_FAILURE);
+	}
+	char key[20] = "CLAVE";
+
+	if (config_has_property(config, &key)) {
+		char* key_value = malloc(sizeof(char) * 20);
+		key_value = config_get_string_value(config, &key);
+		log_info(logger, key_value);
+		free(key_value);
+	}
+
+	free(path);
 	/* ---------------- LEER DE CONSOLA ---------------- */
 
 	leer_consola(logger);
@@ -69,6 +91,14 @@ int main(void)
 
 	/*---------------------------------------------------PARTE 5-------------------------------------------------------------*/
 	// Proximamente
+
+
+	free(file);
+	free(process_name);
+	free(message);
+	free(logger);
+
+	config_destroy(config);
 }
 
 t_log* iniciar_logger(char* file, char* proccess_name, bool is_active_console, t_log_level level)
@@ -78,10 +108,10 @@ t_log* iniciar_logger(char* file, char* proccess_name, bool is_active_console, t
 	return nuevo_logger;
 }
 
-t_config* iniciar_config(void)
+t_config* iniciar_config(char* path)
 {
 	t_config* nuevo_config;
-
+	nuevo_config = config_create(path);
 	return nuevo_config;
 }
 
