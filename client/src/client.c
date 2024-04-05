@@ -19,7 +19,7 @@ int main(void)
 
 	char* message = malloc(sizeof(char) * 100);
 	strcpy(message, "Hola! Soy un log");
-	
+
 	logger = iniciar_logger();
 
 	log_info(logger, message);
@@ -27,7 +27,7 @@ int main(void)
 
 	/* ---------------- ARCHIVOS DE CONFIGURACION ---------------- */
 
-	// Usando el config creado previamente, leemos los valores del config y los 
+	// Usando el config creado previamente, leemos los valores del config y los
 	// dejamos en las variables 'ip', 'puerto' y 'valor'
 
 	// Loggeamos el valor de config
@@ -39,7 +39,7 @@ int main(void)
 	// printf(msj);
 	// strcpy(message, msj);
 	// log_info(logger, message);
-	
+
 	config = iniciar_config();
 
 	if (config == NULL) {
@@ -95,7 +95,7 @@ t_log* iniciar_logger()
 
 	strcpy(file, "./tp0.log");
 	strcpy(process_name, "proccess");
-	
+
 	is_active_console = true;
 	level = LOG_LEVEL_INFO;
 
@@ -125,9 +125,16 @@ void leer_consola(t_log* logger)
 	leido = readline("> ");
 
 	// El resto, las vamos leyendo y logueando hasta recibir un string vacío
+	while((*leido) != '\0')
+	{
+		log_info(logger, leido);
+		leido = readline("> ");
+	}
 
 
 	// ¡No te olvides de liberar las lineas antes de regresar!
+	free(leido);
+	//exit(EXIT_SUCCESS);
 
 }
 
@@ -141,11 +148,11 @@ void paquete(int conexion)
 
 
 	// ¡No te olvides de liberar las líneas y el paquete antes de regresar!
-	
+
 }
 
 void terminar_programa(int conexion, t_log* logger, t_config* config)
 {
-	/* Y por ultimo, hay que liberar lo que utilizamos (conexion, log y config) 
+	/* Y por ultimo, hay que liberar lo que utilizamos (conexion, log y config)
 	  con las funciones de las commons y del TP mencionadas en el enunciado */
 }
