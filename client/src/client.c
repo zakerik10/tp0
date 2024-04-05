@@ -49,30 +49,26 @@ int main(void)
 		log_info(logger, message);
 		exit(EXIT_FAILURE);
 	}
-	char key[20] = "CLAVE";
 
-	if (config_has_property(config, &key)) {
-		char* key_value = malloc(sizeof(char) * 20);
-		key_value = config_get_string_value(config, &key);
-		log_info(logger, key_value);
-		free(key_value);
-	}
+	valor = buscar_en_config_y_loggear(logger, config, "CLAVE");
+	ip = buscar_en_config_y_loggear(logger, config, "IP");
+	puerto = buscar_en_config_y_loggear(logger, config, "PUERTO");
 
 	/* ---------------- LEER DE CONSOLA ---------------- */
 
-	leer_consola(logger);
-
+	//leer_consola(logger);
 	/*---------------------------------------------------PARTE 3-------------------------------------------------------------*/
 
 	// ADVERTENCIA: Antes de continuar, tenemos que asegurarnos que el servidor esté corriendo para poder conectarnos a él
 
 	// Creamos una conexión hacia el servidor
+	
 	conexion = crear_conexion(ip, puerto);
-
+	printf("conexion: %i\n", conexion);
 	// Enviamos al servidor el valor de CLAVE como mensaje
 
 	// Armamos y enviamos el paquete
-	paquete(conexion);
+	//paquete(conexion);
 
 	terminar_programa(conexion, logger, config);
 
@@ -80,9 +76,6 @@ int main(void)
 	// Proximamente
 
 	free(message);
-	free(logger);
-
-	config_destroy(config);
 }
 
 t_log* iniciar_logger()
@@ -130,12 +123,8 @@ void leer_consola(t_log* logger)
 		log_info(logger, leido);
 		leido = readline("> ");
 	}
-
-
 	// ¡No te olvides de liberar las lineas antes de regresar!
 	free(leido);
-	//exit(EXIT_SUCCESS);
-
 }
 
 void paquete(int conexion)
@@ -155,4 +144,15 @@ void terminar_programa(int conexion, t_log* logger, t_config* config)
 {
 	/* Y por ultimo, hay que liberar lo que utilizamos (conexion, log y config)
 	  con las funciones de las commons y del TP mencionadas en el enunciado */
+	free(logger);
+	config_destroy(config);
+}
+
+char* buscar_en_config_y_loggear(t_log* logger, t_config* config, char* nombre) {
+	char* valor_devuelto;
+	if (config_has_property(config, nombre)) {
+		valor_devuelto = config_get_string_value(config, nombre);
+		log_info(logger, valor_devuelto);
+	}
+	return valor_devuelto;
 }

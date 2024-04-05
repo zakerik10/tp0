@@ -17,4 +17,6 @@ void leer_consola(t_log*);
 void paquete(int);
 void terminar_programa(int, t_log*, t_config*);
 
+char* buscar_en_config_y_loggear(t_log* logger, t_config* config, char* nombre);
+
 #endif /* CLIENT_H_ */
