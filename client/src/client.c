@@ -14,10 +14,29 @@ int main(void)
 
 	/* ---------------- LOGGING ---------------- */
 
-	logger = iniciar_logger();
-
 	// Usando el logger creado previamente
 	// Escribi: "Hola! Soy un log"
+
+	char* file = malloc(sizeof(char) * 100);
+	char* process_name = malloc(sizeof(char) * 30);
+	char* message = malloc(sizeof(char) * 30);
+	bool is_active_console;
+	t_log_level level;
+
+	strcpy(file, "./tp0.log");
+	strcpy(process_name, "proccess");
+	strcpy(message, "Hola! Soy un log");
+	is_active_console = true;
+	level = LOG_LEVEL_INFO;
+	
+	logger = iniciar_logger(file, process_name, is_active_console, level);
+
+	log_info(logger, message);
+
+	free(file);
+	free(process_name);
+	free(message);
+	free(logger);
 
 
 	/* ---------------- ARCHIVOS DE CONFIGURACION ---------------- */
@@ -52,10 +71,10 @@ int main(void)
 	// Proximamente
 }
 
-t_log* iniciar_logger(void)
+t_log* iniciar_logger(char* file, char* proccess_name, bool is_active_console, t_log_level level)
 {
 	t_log* nuevo_logger;
-
+	nuevo_logger = log_create(file, proccess_name, is_active_console, level);
 	return nuevo_logger;
 }
 
