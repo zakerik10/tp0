@@ -17,19 +17,10 @@ int main(void)
 	// Usando el logger creado previamente
 	// Escribi: "Hola! Soy un log"
 
-	char* file = malloc(sizeof(char) * 20);
-	char* process_name = malloc(sizeof(char) * 30);
 	char* message = malloc(sizeof(char) * 100);
-	bool is_active_console;
-	t_log_level level;
-
-	strcpy(file, "./tp0.log");
-	strcpy(process_name, "proccess");
 	strcpy(message, "Hola! Soy un log");
-	is_active_console = true;
-	level = LOG_LEVEL_INFO;
 	
-	logger = iniciar_logger(file, process_name, is_active_console, level);
+	logger = iniciar_logger();
 
 	log_info(logger, message);
 
@@ -48,11 +39,8 @@ int main(void)
 	// printf(msj);
 	// strcpy(message, msj);
 	// log_info(logger, message);
-
-	char* path = malloc(sizeof(char) * 100);
-	strcpy(path, "../cliente.config");
 	
-	config = iniciar_config(path);
+	config = iniciar_config();
 
 	if (config == NULL) {
 		// ¡No se pudo crear el config!
@@ -70,7 +58,6 @@ int main(void)
 		free(key_value);
 	}
 
-	free(path);
 	/* ---------------- LEER DE CONSOLA ---------------- */
 
 	leer_consola(logger);
@@ -92,26 +79,41 @@ int main(void)
 	/*---------------------------------------------------PARTE 5-------------------------------------------------------------*/
 	// Proximamente
 
-
-	free(file);
-	free(process_name);
 	free(message);
 	free(logger);
 
 	config_destroy(config);
 }
 
-t_log* iniciar_logger(char* file, char* proccess_name, bool is_active_console, t_log_level level)
+t_log* iniciar_logger()
 {
+
+	char* file = malloc(sizeof(char) * 20);
+	char* process_name = malloc(sizeof(char) * 30);
+	bool is_active_console;
+	t_log_level level;
+
+	strcpy(file, "./tp0.log");
+	strcpy(process_name, "proccess");
+	
+	is_active_console = true;
+	level = LOG_LEVEL_INFO;
+
 	t_log* nuevo_logger;
-	nuevo_logger = log_create(file, proccess_name, is_active_console, level);
+	nuevo_logger = log_create(file, process_name, is_active_console, level);
+
+	free(file);
+	free(process_name);
 	return nuevo_logger;
 }
 
-t_config* iniciar_config(char* path)
+t_config* iniciar_config()
 {
+	char* path = malloc(sizeof(char) * 100);
+	strcpy(path, "../cliente.config");
 	t_config* nuevo_config;
 	nuevo_config = config_create(path);
+	free(path);
 	return nuevo_config;
 }
 
