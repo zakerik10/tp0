@@ -64,8 +64,10 @@ int main(void)
 	// Creamos una conexión hacia el servidor
 	
 	conexion = crear_conexion(ip, puerto);
-	printf("conexion: %i\n", conexion);
 	// Enviamos al servidor el valor de CLAVE como mensaje
+
+	//send(conexion, &valor, sizeof(char*), 0);
+	enviar_mensaje(valor, conexion);
 
 	// Armamos y enviamos el paquete
 	//paquete(conexion);
