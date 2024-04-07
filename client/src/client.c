@@ -134,13 +134,14 @@ t_paquete* paquete(int conexion)
 	char* leido;
 	int leido_lenght;
 	t_paquete* paquete = crear_paquete();
-
+	leido = readline("> ");
 	// Leemos y esta vez agregamos las lineas al paquete
 	while((*leido) != '\0')
 	{
-		leido = readline("> ");
 		leido_lenght = strlen(leido) + 1;
 		agregar_a_paquete(paquete, leido, leido_lenght);
+		printf("Escribi tu mensaje: ");
+		leido = readline("> ");
 	}
 	// ¡No te olvides de liberar las líneas y el paquete antes de regresar!
 	free(leido);

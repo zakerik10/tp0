@@ -21,6 +21,11 @@ int main(void) {
 		case -1:
 			log_error(logger, "el cliente se desconecto. Terminando servidor");
 			return EXIT_FAILURE;
+
+			// Por si queremos que el server no se desconecte y espere otro cliente, usamos lo de abajo
+			// log_error(logger, "el cliente se desconecto.");
+			// log_info(logger, "Esperando nueva conexion");
+			// esperar_cliente(server_fd);
 		default:
 			log_warning(logger,"Operacion desconocida. No quieras meter la pata");
 			break;
