@@ -4,7 +4,7 @@ t_log* logger;
 
 int iniciar_servidor(void)
 {
-	printf("Iniciando Servidor");
+	printf("Iniciando Servidor\n");
 	// Quitar esta línea cuando hayamos terminado de implementar la funcion
 	//assert(!"no implementado!");
 
@@ -26,7 +26,7 @@ int iniciar_servidor(void)
 							servinfo->ai_protocol);
 
 	// Asociamos el socket a un puerto
-	bind(socket_servidor, servinfo->ai_addr, servinfo->ai_addrlen);
+	int bindeo = bind(socket_servidor, servinfo->ai_addr, servinfo->ai_addrlen);
 
 	// Escuchamos las conexiones entrantes
 	listen(socket_servidor, SOMAXCONN);
@@ -43,11 +43,23 @@ int esperar_cliente(int socket_servidor)
 	//assert(!"no implementado!");
 
 	// Aceptamos un nuevo cliente
-	int socket_cliente= accept(socket_cliente, NULL, NULL);;
+	//printf("Se ejecuta el accept\n");
+	int socket_cliente= accept(socket_servidor, NULL, NULL);
 
-	
 	log_info(logger, "Se conecto un cliente!");
+	size_t bytes;
+	int32_t handshake;
+	int32_t resultOk = 0;
+	int32_t resultError = -1;
+	
+	bytes = recv(socket_cliente, &handshake, sizeof(int32_t), MSG_WAITALL);
 
+	if (handshake == 1) {
+		bytes = send(socket_cliente, &resultOk, sizeof(int32_t), 0);
+	} else {
+		bytes = send(socket_cliente, &resultError, sizeof(int32_t), 0);
+	}
+	
 	return socket_cliente;
 }
 
