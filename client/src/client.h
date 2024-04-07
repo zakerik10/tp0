@@ -10,11 +10,10 @@
 
 #include "utils.h"
 
-
 t_log* iniciar_logger(void);
 t_config* iniciar_config(void);
 void leer_consola(t_log*);
-void paquete(int);
+t_paquete* paquete(int);
 void terminar_programa(int, t_log*, t_config*);
 
 char* buscar_en_config_y_loggear(t_log* logger, t_config* config, char* nombre);

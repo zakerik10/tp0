@@ -55,29 +55,27 @@ int main(void)
 	puerto = buscar_en_config_y_loggear(logger, config, "PUERTO");
 
 	/* ---------------- LEER DE CONSOLA ---------------- */
-
+	
 	//leer_consola(logger);
 	/*---------------------------------------------------PARTE 3-------------------------------------------------------------*/
 
 	// ADVERTENCIA: Antes de continuar, tenemos que asegurarnos que el servidor esté corriendo para poder conectarnos a él
 
 	// Creamos una conexión hacia el servidor
-	
 	conexion = crear_conexion(ip, puerto);
-	// Enviamos al servidor el valor de CLAVE como mensaje
 
-	//send(conexion, &valor, sizeof(char*), 0);
+	// Enviamos al servidor el valor de CLAVE como mensaje
 	enviar_mensaje(valor, conexion);
 
 	// Armamos y enviamos el paquete
-	//paquete(conexion);
+	t_paquete* nuevo_paquete = paquete(conexion);
+	enviar_paquete(nuevo_paquete, conexion);
 
 	terminar_programa(conexion, logger, config);
 
+	free(message);
 	/*---------------------------------------------------PARTE 5-------------------------------------------------------------*/
 	// Proximamente
-
-	free(message);
 }
 
 t_log* iniciar_logger()
@@ -129,16 +127,25 @@ void leer_consola(t_log* logger)
 	free(leido);
 }
 
-void paquete(int conexion)
+t_paquete* paquete(int conexion)
 {
 	// Ahora toca lo divertido!
+	printf("Armnando Paquete\n");
 	char* leido;
-	t_paquete* paquete;
+	int leido_lenght;
+	t_paquete* paquete = crear_paquete();
 
 	// Leemos y esta vez agregamos las lineas al paquete
-
-
+	while((*leido) != '\0')
+	{
+		leido = readline("> ");
+		leido_lenght = strlen(leido) + 1;
+		agregar_a_paquete(paquete, leido, leido_lenght);
+	}
 	// ¡No te olvides de liberar las líneas y el paquete antes de regresar!
+	free(leido);
+
+	return paquete;
 
 }
 
